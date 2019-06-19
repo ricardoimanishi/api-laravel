@@ -44,7 +44,7 @@ class MasterApiController extends BaseController
             $nameFile = "{$name}.{$extension}";
 
             //Efetua o upload do arquivo de imagem
-            $upload = Image::make($dataForm[$this->upload])->resize(177, 236)->save(storage_path("app/public/clientes/$nameFile", 70));
+            $upload = Image::make($dataForm[$this->upload])->resize(177, 236)->save(storage_path("app/public/{$this->path}/{$nameFile}", 70));
 
             if (!$upload) {
                 return response()->json(['error' => 'Falha ao fazer upload'], 500);
@@ -86,7 +86,7 @@ class MasterApiController extends BaseController
          if ($request->hasFile($this->upload) && $request->file($this->upload)->isValid()) {
 
             if ($data->image) {
-                Storage::disk('public')->delete("/clientes/$data->image");
+                Storage::disk('public')->delete("/{$this->path}/$data->image");
             }
 
              //captura a extensão
@@ -97,7 +97,7 @@ class MasterApiController extends BaseController
              $nameFile = "{$name}.{$extension}";
  
              //Efetua o upload do arquivo de imagem
-             $upload = Image::make($dataForm[$this->upload])->resize(177, 236)->save(storage_path("app/public/clientes/$nameFile", 70));
+             $upload = Image::make($dataForm[$this->upload])->resize(177, 236)->save(storage_path("app/public/{$this->path}/$nameFile", 70));
  
              if (!$upload) {
                  return response()->json(['error' => 'Falha ao fazer upload'], 500);
@@ -118,7 +118,7 @@ class MasterApiController extends BaseController
         if (!$data) {
             return response()->json(['error' => 'Nada foi deletado!'], 404);
         } else {
-            Storage::disk('public')->delete("/models/$data->image");
+            Storage::disk('public')->delete("/{$this->path}/$data->image");
         }
         $data->delete();
 
