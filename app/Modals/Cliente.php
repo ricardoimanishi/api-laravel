@@ -10,7 +10,7 @@ class Cliente extends Model
     protected $fillable = [
         'nome', 'image'
     ];
-    
+
     //Regras para os campos
     public function rules()
     {
@@ -18,5 +18,11 @@ class Cliente extends Model
             'nome' => 'required',
             'image' => 'image'
         ];
+    }
+
+    public function arquivo($id)
+    {
+        $data = $this->find($id);
+        return $data->image;
     }
 }
