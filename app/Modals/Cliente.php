@@ -10,7 +10,7 @@ class Cliente extends Model
     protected $fillable = [
         'nome', 'image', 'cpf_cnpj',
     ];
-    
+
     //Regras para os campos
     public function rules()
     {
@@ -19,5 +19,11 @@ class Cliente extends Model
             'image' => 'image',
             'cpf_cnpj' => 'required|unique:clientes'
         ];
+    }
+
+    public function arquivo($id)
+    {
+        $data = $this->find($id);
+        return $data->image;
     }
 }
