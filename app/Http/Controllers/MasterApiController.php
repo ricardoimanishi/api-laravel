@@ -14,7 +14,7 @@ class MasterApiController extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
-   /**
+    /**
      * Função para retornar todos os registros da tabela clientes
      */
     public function index()
@@ -37,7 +37,7 @@ class MasterApiController extends BaseController
         //verifica se possui uma imagem e se ela é valida
         if ($request->hasFile($this->upload) && $request->file($this->upload)->isValid()) {
             //captura a extensão
-            $extension = $request->image->extension();
+            $extension = $request->file($this->upload)->extension();
 
             //determina o nome do arquivo
             $name = uniqid(date('His'));
@@ -76,52 +76,52 @@ class MasterApiController extends BaseController
             return response()->json(['error' => 'Nada foi atualizado!'], 404);
         }
 
-         //valida os campos comforme regras do Modal Cliente
-         $this->validate($request, $this->model->rules());
+        //valida os campos comforme regras do Modal Cliente
+        $this->validate($request, $this->model->rules());
 
-         //coloca na variavel $dataForm os dados recebidos pela request
-         $dataForm = $request->all();
- 
-         //verifica se possui uma imagem e se ela é valida
-         if ($request->hasFile($this->upload) && $request->file($this->upload)->isValid()) {
+        //coloca na variavel $dataForm os dados recebidos pela request
+        $dataForm = $request->all();
 
-            if ($data->image) {
-                Storage::disk('public')->delete("/{$this->path}/$data->image");
+        //verifica se possui uma imagem e se ela é valida
+        if ($request->hasFile($this->upload) && $request->file($this->upload)->isValid()) {
+            $arquivo = $this->model->arquivo($id);
+            if ($arquivo) {
+                Storage::disk('public')->delete("/{$this->path}/$arquivo");
             }
 
-             //captura a extensão
-             $extension = $request->image->extension();
- 
-             //determina o nome do arquivo
-             $name = uniqid(date('His'));
-             $nameFile = "{$name}.{$extension}";
- 
-             //Efetua o upload do arquivo de imagem
-             $upload = Image::make($dataForm[$this->upload])->resize(177, 236)->save(storage_path("app/public/{$this->path}/$nameFile", 70));
- 
-             if (!$upload) {
-                 return response()->json(['error' => 'Falha ao fazer upload'], 500);
-             } else {
-                 $dataForm[$this->upload] = $nameFile;
-             }
-         }
- 
-         $data->update($dataForm);
- 
-         return response()->json($data);
+            //captura a extensão
+            $extension = $request->file($this->upload)->extension();
+
+            //determina o nome do arquivo
+            $name = uniqid(date('His'));
+            $nameFile = "{$name}.{$extension}";
+
+            //Efetua o upload do arquivo de imagem
+            $upload = Image::make($dataForm[$this->upload])->resize(177, 236)->save(storage_path("app/public/{$this->path}/$nameFile", 70));
+
+            if (!$upload) {
+                return response()->json(['error' => 'Falha ao fazer upload'], 500);
+            } else {
+                $dataForm[$this->upload] = $nameFile;
+            }
+        }
+
+        $data->update($dataForm);
+
+        return response()->json($data);
     }
 
     public function destroy($id)
     {
-        $data = $this->model->find($id);
-
-        if (!$data) {
-            return response()->json(['error' => 'Nada foi deletado!'], 404);
+        if ($data = $this->model->find($id)) {
+            if (method_exists($this->model, 'arquivo')) {
+                Storage::disk('public')->delete("/{$this->path}/{$this->model->arquivo($id)}");
+            }
+            $data->delete();
+            return response()->json(['sucess' => 'Deletado com sucesso!']);
         } else {
-            Storage::disk('public')->delete("/{$this->path}/$data->image");
+            return response()->json(['error' => 'Nada foi deletado!'], 404);
         }
-        $data->delete();
 
-        return response()->json(['sucess' => 'Deletado com sucesso!']);
     }
 }
