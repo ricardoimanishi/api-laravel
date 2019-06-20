@@ -4,19 +4,19 @@ namespace App\Modals;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Cliente extends Model
+class Documento extends Model
 {
     //Liberar acesso aos campos da tabela
     protected $fillable = [
-        'nome', 'image'
+        'cliente_id', 'cpf_cnpj'
     ];
     
     //Regras para os campos
     public function rules()
     {
         return [
-            'nome' => 'required',
-            'image' => 'image'
+            'cliente_id' => 'required',
+            'cpf_cnpj' => 'required|unique:documentos'
         ];
     }
 }

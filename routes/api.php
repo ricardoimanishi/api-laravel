@@ -4,3 +4,4 @@
 // Route::post('clientes', 'Api\ClienteApiController@store');
 
 $this->apiResource('clientes', 'Api\ClienteApiController');
+$this->apiResource('documento', 'Api\DocumentoApiController');
