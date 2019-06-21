@@ -3,12 +3,14 @@
 namespace App\Modals;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Modals\Documento;
 
 class Cliente extends Model
 {
     //Liberar acesso aos campos da tabela
     protected $fillable = [
-        'nome', 'image'
+        'nome', 
+        'image'
     ];
 
     //Regras para os campos
@@ -25,4 +27,10 @@ class Cliente extends Model
         $data = $this->find($id);
         return $data->image;
     }
+
+    public function documento()
+    { 
+        return $this->hasOne(Documento::class, 'cliente_id', 'id');
+    }
+  
 }
