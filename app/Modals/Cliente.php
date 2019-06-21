@@ -32,4 +32,5 @@ class Cliente extends Model
     { 
         return $this->hasOne(Documento::class, 'cliente_id', 'id');
     }
+  
 }
