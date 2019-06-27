@@ -4,6 +4,7 @@
 // Route::post('clientes', 'Api\ClienteApiController@store');
 
 $this->get('clientes/{id}/documento', 'Api\ClienteApiController@documento');
+$this->get('clientes/{id}/telefone', 'Api\ClienteApiController@telefone');
 $this->apiResource('clientes', 'Api\ClienteApiController');
 
 $this->get('documento/{id}/cliente', 'Api\DocumentoApiController@cliente');

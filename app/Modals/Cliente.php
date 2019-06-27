@@ -32,5 +32,10 @@ class Cliente extends Model
     { 
         return $this->hasOne(Documento::class, 'cliente_id', 'id');
     }
+
+    public function telefone()
+    { 
+        return $this->hasMany(Telefone::class, 'cliente_id', 'id');
+    }
   
 }
