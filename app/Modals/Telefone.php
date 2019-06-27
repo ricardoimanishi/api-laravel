@@ -27,4 +27,9 @@ class Telefone extends Model
     { 
         return $this->hasMany(Telefone::class, 'cliente_id', 'id');
     }
+
+    public function cliente()
+    { 
+        return $this->belongsto(Cliente::class, 'cliente_id', 'id');
+    }
 }

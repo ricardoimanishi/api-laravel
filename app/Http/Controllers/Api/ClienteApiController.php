@@ -32,6 +32,17 @@ class ClienteApiController extends MasterApiController
         }
     }
 
+    public function telefone($id) 
+    {
+        $data = $this->model->with('telefone')->find($id);
+
+        if (!$data) {
+            return response()->json(['error' => 'Nada foi encontrado!'], 404);
+        } else {
+            return response()->json($data);
+        }
+    }
+
     // /**
     //  * Função para retornar todos os registros da tabela clientes
     //  */
